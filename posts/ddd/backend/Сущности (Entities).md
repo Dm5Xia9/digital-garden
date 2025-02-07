@@ -13,9 +13,9 @@
 ## Пример сущности: Пользователь (User)
 
 ```csharp
-public class User
+[DevEnvironment(TypeModifier.Entity)]
+public class User: Entity<User.Identifier>
 {
-    public Guid Id { get; private set; }
     public string Name { get; private set; }
     public string Email { get; private set; }
 
@@ -33,6 +33,11 @@ public class User
             throw new ArgumentException("Имя пользователя не может быть пустым.");
         }
         Name = newName;
+    }
+    
+    public record Identifier(Guid Value) : IIdentifier
+    {
+        public Identifier() : this(Guid.NewGuid()) { }
     }
 }
 ```

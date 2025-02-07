@@ -17,7 +17,7 @@ public interface IUnitOfWork : IDisposable
 {
     IOrderRepository Orders { get; }
     ICustomerRepository Customers { get; }
-    int Complete();
+    int SaveChanges();
 }
 ```
 
@@ -38,7 +38,7 @@ public class UnitOfWork : IUnitOfWork
     public IOrderRepository Orders { get; private set; }
     public ICustomerRepository Customers { get; private set; }
 
-    public int Complete()
+    public int SaveChanges()
     {
         return _context.SaveChanges();
     }
@@ -66,7 +66,7 @@ public class OrderService
     {
         _unitOfWork.Customers.Update(customer);
         _unitOfWork.Orders.Add(order);
-        _unitOfWork.Complete();
+        _unitOfWork.SaveChanges();
     }
 }
 ```

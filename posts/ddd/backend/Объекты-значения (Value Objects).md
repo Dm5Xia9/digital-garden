@@ -11,11 +11,12 @@
 ## Пример объекта-значения: Адрес (Address)
 
 ```csharp
-public class Address
+[DevEnvironment(TypeModifier.ValueObject)]
+public record Address
 {
-    public string Street { get; }
-    public string City { get; }
-    public string ZipCode { get; }
+    public string Street { get; init; }
+    public string City { get; init; }
+    public string ZipCode { get; init; }
 
     public Address(string street, string city, string zipCode)
     {
@@ -26,17 +27,6 @@ public class Address
         Street = street;
         City = city;
         ZipCode = zipCode;
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj is not Address other) return false;
-        return Street == other.Street && City == other.City && ZipCode == other.ZipCode;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Street, City, ZipCode);
     }
 }
 ```

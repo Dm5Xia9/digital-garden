@@ -14,19 +14,18 @@
 
 ```csharp
 [DevEnvironment(TypeModifier.AggregateRoot)]
-public class Order
+public class Order: Entity<Order.Identifier>
 {
-    public Guid OrderId { get; private set; }
-    public Guid CustomerId { get; private set; }
-    private List<OrderItem> _items = new();
+    private readonly List<OrderItem> _items = new();
     
-    public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
-
     public Order(Guid customerId)
     {
-        OrderId = Guid.NewGuid();
         CustomerId = customerId;
     }
+    
+    public Guid CustomerId { get; private set; }
+
+    public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
 
     public void AddItem(Guid productId, int quantity)
     {
@@ -38,9 +37,16 @@ public class Order
     {
         return _items.Sum(item => item.Quantity);
     }
+
+
+    public record Identifier(Guid Value) : IIdentifier
+    {
+        public Identifier() : this(Guid.NewGuid()) { }
+    }
 }
 
-public class OrderItem
+[DevEnvironment(TypeModifier.Entity)]
+public class OrderItem: Entity<OrderItem.Identifier>
 {
     public Guid ProductId { get; private set; }
     public int Quantity { get; private set; }
@@ -49,6 +55,11 @@ public class OrderItem
     {
         ProductId = productId;
         Quantity = quantity;
+    }
+
+    public record Identifier(Guid Value) : IIdentifier
+    {
+        public Identifier() : this(Guid.NewGuid()) { }
     }
 }
 ```
