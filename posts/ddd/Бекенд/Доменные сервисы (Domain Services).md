@@ -14,14 +14,14 @@
 ```csharp
 public interface IOrderPricingService
 {
-    decimal CalculateTotalPrice(Order order);
+    decimal CalculateTotalPrice(IEnumerable<Order> orders);
 }
 
 public class OrderPricingService : IOrderPricingService
 {
-    public decimal CalculateTotalPrice(Order order)
+    public decimal CalculateTotalPrice(IEnumerable<Order> orders)
     {
-        return order.Items.Sum(item => item.Price * item.Quantity);
+        return orders.Sum(order => order.Items.Sum(item => item.Price * item.Quantity));
     }
 }
 ```
